@@ -1,6 +1,6 @@
 # coding: utf-8
 # author: @yos1up
-import numpy as np
+_infty_ = 2147483640
 
 # トークンの辞書。主にtokenizeメソッドで使われる。（コロンの右側に書いてある）valueたちを「トークン」と呼ぶ。
 dictionary_misc = {
@@ -122,12 +122,14 @@ dictionary_misc = {
         'いち':'1',
         'いっ':'1', # いってんいち
         'に':'2',
-        'にー':'2', # にいちさん(213)　とかがあって「にい」を加えていない　（ちゃんと経路探索させるようにすればokなんだが）
+        'にー':'2',
+        'にい':'2',
         'ふた':'2',
         'さん':'3',
         'よん':'4',
         'ご':'5',
         'ごー':'5', # ごおー (5o) とかがあって「ごお」を加えていない
+        'ごお':'5',
         'ろく':'6',
         'ー': '', # そもそもこれで語尾の伸ばし棒を吸収できるので、他のいくつかのエントリーは消しても大丈夫なはず。ただ、一応残してある。(TODO: このエントリは妥当か？)
         'ろっ':'6',
@@ -136,6 +138,8 @@ dictionary_misc = {
         'はっ':'8',
         'きゅう':'9',
         'じゅう':'10',
+        'じゅっ':'10',
+        'じっ':'10',
         'ひゃく':'100',
         'びゃく': '100',
         'ぴゃく': '100',
@@ -150,16 +154,27 @@ dictionary_misc = {
         'むりょうたいすう': '10000000000000000000000000000000000000000000000000000000000000000',
         'ぐーごる': '10000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000',
         'てふ': '\\TeX ',
+        'てっく': '\\TeX ',
+        'てっくす': '\\TeX ',
+        'じゃば': '\\textrm{JAVA + YOU, DOWNLOAD TODAY!}', # あなたとJAVA, 今すぐダウンロー　ド
         'てん':'.',
         'じょう':'^',
         'じょうこん':'^/',
+        'じじょう':['2','^'],
+        'ぴい':'_P_', # 順列
+        'しい':'_C_', # 組み合わせ
+        'ばー':'\\overline ',
         'の':'', # さんのよんじょう（いずれは、^のヒントに使うようにするかも。）
         'と':'', # きゅうとよんぶんのさん
         'か':'', # きゅうかよんぶんのさん（昔の呼び方）
+        'ことの':'',
         'たす':'+',
         'ぷらす':'+',
         'ぷらまい':'\\pm ',
         'ぷらすまいなす':'\\pm ',
+        'まいなすぷらす':'\\mp ',
+        'まいぷら':'\\mp ',
+        'ぷらぷら':'++',
         'ひく':'-',
         'まいなす':'-',
         'かける':'\\times ',
@@ -180,6 +195,8 @@ dictionary_misc = {
         'から':'', # いずれは、sumのヒントに使うようにするかも。
         '「':'(',
         '」':')',
+        '（':'(',
+        '）':')',
         '、':',',
         '。':'.',  
         '・':'\\cdot ',
@@ -198,6 +215,7 @@ dictionary_misc = {
         'または': '\\vee ', # \\lor は google chart APIが未対応だった
         'ひれい':'\\propto ',
         'びっくり':'!',
+        'かいじょう':'!', # 中高生は ^{\\chi} は使わないだろう。
         'あれふ':'\\aleph ',
         'むげん':'\\infty ',
         'むげんだい':'\\infty ',
@@ -212,7 +230,10 @@ dictionary_misc = {
         'なちゅらる':'\\natural ',
         'ふらっと':'\\flat ',
         'ふぉあおーる':'\\forall ',
+        'すべて':'\\forall ',
+        'にんい':'\\forall ',
         'いぐじすつ':'\\exists ',
+        'ある':'\\exists ',
         'いんばーす':'^{-1}',
         'てんち':'^{T}',         
         'おーばー':'/', # これは単なる記号として
@@ -248,23 +269,55 @@ dictionary_misc = {
         'じっすう': '\\mathbb{R}',
         'ふくそすう': '\\mathbb{C}',
         'しげんすう': '\\mathbb{H}',
+        'くおたにおん': '\\mathbb{H}',
         'はちげんすう': '\\mathbb{O}',
+        'おくたにおん': '\\mathbb{O}',
         'じゅうろくげんすう': '\\mathbb{S}',
         'そすう': '\\mathbb{P}', # これ使われてるの見たことない
         'ごうせい': '\\circ ',
         'まる': '\\circ ',
-        'せくしょん': '\\S '
+        'せくしょん': '\\S ',
+        ' ':' ',
+        'さいん':'\\sin ',
+        'こさいん':'\\cos ',
+        'こす':'\\cos ',
+        'たんじぇんと':'\\tan ',
+        'たん':'\\tan ',
+        'あーくこさいん': '\\arccos ',
+        'あーくさいん': '\\arcsin ',
+        'あーくたんじぇんと': '\\arctan ',
+        'はいぱぼりっくこさいん': '\\cosh ',
+        'はいぱぼりっくさいん': '\\sinh ',
+        'はいぱぼりっくたんじぇんと': '\\tanh ',
+        'せかんと': '\\sec ',
+        'こせかんと': '\\csc ',
+        'こたんじぇんと': '\\cot ',
+        'よげんていり': '{AC^2 = AB^2 + BC^2 - 2AB\\cdot BC\\cos B}',
+        'せいげんていり': '{\\frac{AB}{\\sin C} = \\frac{BC}{\\sin A} = \\frac{CA}{\\sin B}}',
+        'おいらーのこうしき': '{e^{i\\pi} = -1}',
+        'どもあぶるのていり': '{e^{i\\theta} = \\cos\\theta + i\\sin\\theta}',
+        'かほうていり': '{\\sin(x+y) = \\sin x \\cos y + \\cos x \\sin y, \\cos(x+y) = \\cos x \\cos y - \\sin x \\sin y}',
+        'ぴたごらすのていり': '{AB^2 + BC^2 = AC^2}',
+        'さんへいほうのていり': '{AB^2 + BC^2 = AC^2}',
+        'ちゅうせんていり': '{AB^2 + AC^2 = 2(AM^2 + BM^2)}',
+        'とれみーのていり': '{AB\\cdot CD + BC\\cdot DA = AC\\cdot BD}',
+        'いいよこいよ': '{114514}',
+        'なんでやはんしんかんけいないやろ': '{334}',
+        'なんでや！はんしんかんけいないやろ': '{334}', # 末尾の！は階乗になる。
+        'じんるいうちゅうすべてのこたえ':'{42}',
+        'じんるい、うちゅう、すべてのこたえ':'{42}'
 }
 dictionary_func = { # 関数　自動で括弧がついたり特殊処理が行われたりする。
         # TODO: 三角関数はここに加えず単に記号とした方が良い？
         # TODO: 「るーと」はここよりも「じょう」「じょうこん」「ぶんの」あたりと同じ括りの方が良いかも？
+        # むしろそいつらをここに持ってきた方が良いかも
         'るーと':'\\sqrt ',
-        'さいん':'\\sin ',
-        'こさいん':'\\cos ',
-        'たんじぇんと':'\\tan ',
+        'びぶんでぃー1':'\\diffd1 ', # これらはdetect_diffによって発生します
+        'びぶんでぃー2':'\\diffd2 ',         
         'ろぐ':'\\log ',
         'ろがりずむ':'\\log ', 
         'ぜったいち':'\\abs ',
+        'あぶす':'\\abs ',
         'のるむ':'\\norm ',
         'がうす':'\\gauss ', # ガウス関数
         'ふろあ':'\\floor ',
@@ -274,12 +327,6 @@ dictionary_func = { # 関数　自動で括弧がついたり特殊処理が行�
         'あーぐ':'\\arg ',
         'いくすぷ': '\\exp ',
         'えくすぷ': '\\exp ',
-        'あーくこさいん': '\\arccos ',
-        'あーくさいん': '\\arcsin ',
-        'あーくたんじぇんと': '\\arctan ',
-        'せかんと': '\\sec ',
-        'こせかんと': '\\csc ',
-        'こたんじぇんと': '\\cot ',
         'でっと': '\\det ',
         'とれーす': '\\textrm{tr} ',
         'とら': '\\textrm{tr} ',
@@ -290,6 +337,10 @@ dictionary_func = { # 関数　自動で括弧がついたり特殊処理が行�
         'いめーじ': '\\textrm{Im} ',
         'おーと': '\\textrm{Aut} ',
         'えんど': '\\textrm{End} ',
+        'とー': '\\textrm{Tor} ',
+        'とーじょん': '\\textrm{Tor} ',
+        'えくすと': '\\textrm{Ext} ',
+        'いくすと': '\\textrm{Ext} ',
         'おーど': '\\textrm{ord} ',
         'おーだ': '\\textrm{ord} ',
         'おーだー': '\\textrm{ord} ', # ord_p 下付きにできるのと読み分ける？
@@ -309,6 +360,8 @@ dictionary_func = { # 関数　自動で括弧がついたり特殊処理が行�
         'れる': '\\textrm{ReLU} ',
         'れるー': '\\textrm{ReLU} ',
         'えるー': '\\textrm{ELU} ',
+        'いーえるゆー': '\\textrm{ELU} ',
+        'そふとまっくす': '\\textrm{softmax} ',
         'えるふ': '\\textrm{erf} ', # 言わないか。
         'あいあいでぃー': '\\textrm{i.i.d.} ',
         'じーしーでぃー': '\\textrm{gcd} ', # この辺は誤爆する人いないかな・・・？
@@ -337,7 +390,9 @@ dictionary_sym_sub_sup = { # _ で真下に、^ で真上に式が書かれる�
         'ぷろど':'\\prod ',
         'ぷろっど': '\\prod ',
         'せききごう':'\\prod ',
-        'せきぶん':'\\int ',       
+        'せきぶん':'\\int ',
+        'いんてぐらる':'\\int ',            
+        'いんと':'\\int '
 }
 # TODO: 優先度のたかそうなものを列挙：単位系、添え字の記述法を考える（とりあえずはカッコ・・・）、
 
@@ -345,10 +400,36 @@ dictionary = {}
 for d in [dictionary_misc, dictionary_func, dictionary_sym_sub, dictionary_sym_sub_sup]:    
     dictionary.update(d)
 tokens_func = {v for v in dictionary_func.values()}
+tokens = {v if isinstance(v, str) else '' for v in dictionary.values()} # listはunhashableなので避けている
 tokens_sym_sub_sup = {v for v in dictionary_sym_sub_sup.values()}
 tokens_sym_sub = {v for v in dictionary_sym_sub.values()}
 dictionary_maxlength = max([len(s) for s in dictionary.keys()])
 
+
+roman = ['a','a','i','i','u','u','e','e','o','o',
+        'ka','ga','ki','gi','ku','gu','ke','ge','ko','go',
+        'sa','za','shi','ji','su','zu','se','ze','so','zo',
+        'ta','da','chi','di','tsu','tsu','zu','te','de','to','do',
+        'na','ni','nu','ne','no','ha','ba','pa','hi','bi','pi',
+        'fu','bu','pu','he','be','pe','ho','bo','po',
+        'ma','mi','mu','me','mo','ya','ya','yu','yu','yo','yo',
+        'ra','ri','ru','re','ro','wa','wa','wi','we','wo','n','vu','ka','ke']
+def kana2roman(s):
+    '''
+    s: 文字列
+    returns: カナだけローマ字読みに差し替えられた文字列
+    ※ これはgoogle chart APIが日本語に対応していないので便宜的に作成したものです。
+    「きゅうりょう」を kyuuryou などとする機能はありません。kiyuuriyou となるだけです。
+    '''
+    ret = ''
+    for c in s:
+        idx = -1
+        if (0<=ord(c)-ord('ぁ')<len(roman)):
+            idx = ord(c) - ord('ぁ')
+        elif (0<=ord(c)-ord('ァ')<len(roman)):
+            idx = ord(c) - ord('ァ')
+        ret += (roman[idx] if idx>=0 else c)
+    return ret
 
 def tokenize(sentence):
     '''
@@ -356,34 +437,51 @@ def tokenize(sentence):
     sentence <str> : （主にひらがなで構成された）文字列
     returns: <list of str> : トークンのリスト。（それぞれのトークンは文字列）
     '''
-    sentence = ''.join([c if (c!='　') else '  ' for c in list(sentence)]) # 全角空白を半角空白2個に変換    
+    sentence = ''.join([c if (c!='　') else '  ' for c in list(sentence)]) # 全角空白を半角空白2個に変換
+    # 解釈不能文字数が最小となるような切り分け方を、動的計画法で求める
+    dp = [_infty_] * (len(sentence)+1)
+    memo = [1] * (len(sentence)+1)
+    dp[0] = 0
+    for i in range(1,len(sentence)+1):
+        if (dp[i] > dp[i-1] + 1):
+            dp[i] = dp[i-1] + 1 # 最後の1文字を解釈しない
+            memo[i] = 1
+        for j in range(1,dictionary_maxlength+1)[::-1]: # 最後のj文字を（可能ならば）解釈する（jは大きい方が良い）
+            if (i<j): continue
+            if (sentence[i-j:i] in dictionary):
+                if (dp[i] > dp[i-j]):
+                    dp[i] = dp[i-j]
+                    memo[i] = j
+    # 結果をもとに、トークンの列を作成（memoを頼りに遡る）
     tokenized_sentence = []
-    offs = 0
-    while offs < len(sentence):
-        if (sentence[offs]==' '): # 連続する半角空白は1つのトークンとして扱われる
-            offs2 = offs
-            while offs2 < len(sentence):
-                if (sentence[offs2]!=' '): break
-                offs2 += 1
-            tokenized_sentence.append(' '*(offs2-offs))
-            offs = offs2
-        else: # それ以外のトークン
-            for j in range(1,dictionary_maxlength+1)[::-1]:
-                item = None
-                try:
-                    s = sentence[offs:offs+j]
-                    item = dictionary[s]
-                except KeyError:
-                    pass
-                if (item is not None):
-                    break
-            if (item is not None):
-                tokenized_sentence.append(item)
-                offs += j
-            else:
-                tokenized_sentence.append('\\text{'+''.join([c if c!='\\' else '\\backslash' for c in sentence[offs]])+'}')
-                offs += 1
-    return tokenized_sentence # トークンのリスト
+    offs = len(sentence)
+    while offs > 0:
+        try:
+            item = dictionary[sentence[offs-memo[offs]:offs]]
+        except KeyError:
+            item = '\\text{'+''.join([c if c!='\\' else '\\backslash' for c in kana2roman(sentence[offs-1])])+'}'
+        if isinstance(item, str):
+            tokenized_sentence.append(item)
+        elif isinstance(item, list):
+            tokenized_sentence += item[::-1]
+        else:
+            raise ValueError
+        offs -= memo[offs]
+    # 反転
+    tokenized_sentence = tokenized_sentence[::-1]
+    # 最後に、連続する半角空白をconcatする。
+    ret = []
+    buf = ''
+    for i in range(len(tokenized_sentence)):
+        if (tokenized_sentence[i]==' '):
+            buf += ' '
+        else:
+            if (buf != ''):
+                ret.append(buf)
+                buf = ''
+            ret.append(tokenized_sentence[i])
+    # 実は最後の半角空白たちが無視されるが、処理に関係ないのでスルーする。
+    return ret
 
 def peal(s):
     '''
@@ -400,10 +498,12 @@ def wrap(s, op):
     '''
     文字列を括弧で包み込む。ただしopによって、包み込む条件が異なる。下記参照。
     s: 文字列、returns: 結果の文字列、op: オプション（というか演算子 operand）
+
+    TODO: もう少し真面目に、括弧で包み込むべき条件を考えた方が良い？
     '''
     if (op=='^'): # べきの基数をかっこで包み込むべきかを返す
-        # 空白以外の文字が1文字以下、でなければ()で囲う
-        return s if sum([c!=' ' for c in s])<=1 else ('(' + s + ')')
+        # 空白以外の文字が1文字以下、または、単一のトークンである、でなければ()で囲う
+        return s if sum([c!=' ' for c in s])<=1 or s in tokens else ('(' + s + ')')
     else: # かけざんの両項を括弧で包み込むべきかを返す
         # 単項式でないなら()で包み込む
         return s if isprincipal(s) else ('(' + s + ')')
@@ -424,6 +524,12 @@ def strength(op):
 
     メインの処理を行うメソッドconvertでは、演算子が強い場所から順に処理されていく。
     '''
+    if (op in ['\\overline ']):
+        return 8
+    if (op in ['\\diffd1 ', '\\diffd2 ']):
+        return 7
+    if (op in ['_P_', '_C_']):
+        return 6
     if (op in list(tokens_sym_sub_sup)+list(tokens_sym_sub)):
         return 5
     if (op in ['^', '^/'] + list(tokens_func)):
@@ -434,14 +540,14 @@ def strength(op):
         return 2
     if (op in ['=', '<', '>', '\\leq ', '\\geq ', '\\neq ', '\\equiv ', '\\approx ']):
         return 1
-    return -np.inf
+    return -_infty_
 
 def isop(op):
     '''
     演算子かどうかを返す。
     op: トークン（文字列）、returns: bool
     '''
-    return strength(op)!=-np.inf
+    return strength(op)!=-_infty_
 
 def find_nopnop(ts, idx, d):
     '''
@@ -497,6 +603,7 @@ def find_larger_space(ts, idx, d):
     returns <int>: 上の条件を満たす最初のoffs. 見つからなかった場合は、d<0 ならば -1, d>0 ならば len(ts) が返る。
     '''
     assert(d==-1 or d==1)
+    if not 0<=idx<len(ts): return idx
     n = isspaces(ts[idx])
     offs = idx+d
     while 0<=offs<len(ts):
@@ -516,6 +623,30 @@ def safe_index(l, target):
         return l.index(target)
     except ValueError:
         return -1
+
+def detect_diff(ts):
+    '''
+    微分のdとおぼしきものをみつけ、印をつけておく。
+      ['d','d']という並びがあれば、最初のdをトークン dictionary['びぶんでぃー1'] に置換する。
+      ['d','(アルファベット1文字)','d']という並びがあれば、最初のdを トークン dictionary['びぶんでぃー2'] に置換する。
+    そして、いずれも、2つ目のdは削除する。
+    '''
+    ret = []
+    i = 0
+    while i < len(ts):
+        if (ts[i] == 'd'):
+            if (i+1<len(ts) and ts[i+1]=='d'):
+                ret.append(dictionary['びぶんでぃー1'])
+                i += 2
+            elif (i+2<len(ts) and ts[i+2]=='d' and len(ts[i+1])==1 and ('A'<=ts[i+1][0]<='Z' or 'a'<=ts[i+1][0]<='z')):
+                ret.append(dictionary['びぶんでぃー2'])
+                ret.append(ts[i+1])
+                i += 3
+        else:
+            ret.append(ts[i])
+            i += 1
+    return ret
+
 def convert(tokenized_sentence):
     '''
     トークンリストをtex文字列に変換するメソッド
@@ -548,13 +679,14 @@ def convert(tokenized_sentence):
         if (len(ts)>=100000):
             print('! WARNING: too many tokens. stop converting.')
             return ''.join(ts) # fail safe
-        if (len(ts)<=1): return ''.join(ts) # 長さ0または1の場合。
+        if (len(ts)<=1): return ''.join([t if not isspaces(t) else '' for t in ts]) # 長さ0または1の場合。
         sl = [strength(w) for w in ts]
         maxstr = max(sl)
-        if (maxstr==-np.inf): return ''.join(ts) # もう演算子がない場合。
+        if (maxstr==-_infty_): return ''.join([t if not isspaces(t) else '' for t in ts]) # もう演算子がない場合。
 
         idx = sl.index(maxstr) # 一番強い演算子 ts[idx] の周囲のトークンをこの後まとめる
         op = ts[idx]
+        # TODO: トークンのグループ分けを要見直し。左右に幾つのチャンクを取るか、でまとめるのが良さそう。
         if (op in tokens_sym_sub_sup): # 真下に _で、真上に^で式を書くタイプの記号 (sum, product)
             idx2 = find_larger_space(ts, idx+1, 1)
             idx3 = find_larger_space(ts, idx2, 1)
@@ -563,37 +695,42 @@ def convert(tokenized_sentence):
             idx2 = find_larger_space(ts, idx+1, 1)
             ts = ts[:idx] + [op+'_{'+peal(convert(ts[idx+1:idx2]))+'}'] + ts[idx2:]
         elif (op in tokens_func): # 関数　自動で括弧がついたり特殊処理が行われたり
+            # ts[idx+1]がn-spaceの時、その次の(n以上)-spaceを見つけて、そのインデックスを返す。n-spaceでない場合は、idx+2を返す。
+            idx2 = find_larger_space(ts, idx+1, 1) # idx2が次の(n以上)-space
             if (op=='\\sqrt '):
-                # ts[idx+1]がn-spaceの時、その次の(n以上)-spaceを見つけて、そのインデックスを返す。n-spaceでない場合は、idx+2を返す。
-                idx2 = find_larger_space(ts, idx+1, 1) # idx2が次の(n以上)-space
                 ts = ts[:idx] + ['\\sqrt{'+peal(convert(ts[idx+1:idx2]))+'}'] + ts[idx2:]
             elif (op == '\\abs '):
-                idx2 = find_larger_space(ts, idx+1, 1) # idx2が次の(n以上)-space
                 ts = ts[:idx] + ['| '+peal(convert(ts[idx+1:idx2]))+'| '] + ts[idx2:]            
             elif (op == '\\norm '):
-                idx2 = find_larger_space(ts, idx+1, 1) # idx2が次の(n以上)-space
                 ts = ts[:idx] + ['|| '+peal(convert(ts[idx+1:idx2]))+'|| '] + ts[idx2:]   # '\\|'認識されない？         
             elif (op == '\\gauss '):
-                idx2 = find_larger_space(ts, idx+1, 1) # idx2が次の(n以上)-space
                 ts = ts[:idx] + ['[ '+peal(convert(ts[idx+1:idx2]))+'] '] + ts[idx2:]        
             elif (op == '\\floor '):
-                idx2 = find_larger_space(ts, idx+1, 1) # idx2が次の(n以上)-space
                 ts = ts[:idx] + ['\\lfloor '+peal(convert(ts[idx+1:idx2]))+'\\rfloor '] + ts[idx2:]        
             elif (op == '\\ceil '):
-                idx2 = find_larger_space(ts, idx+1, 1) # idx2が次の(n以上)-space
-                ts = ts[:idx] + ['\\lceil '+peal(convert(ts[idx+1:idx2]))+'\\rceil '] + ts[idx2:]        
+                ts = ts[:idx] + ['\\lceil '+peal(convert(ts[idx+1:idx2]))+'\\rceil '] + ts[idx2:]
+            elif (op == '\\diffd1 '): # d/dほげ
+                ts = ts[:idx] + ['\\frac{d}{d'+peal(convert(ts[idx+1:idx2]))+'}'] + ts[idx2:]
+            elif (op == '\\diffd2 '): # dぴよ/dほげ
+                idx3 = find_larger_space(ts, idx2, 1)
+                ts = ts[:idx] + ['\\frac{d'+peal(convert(ts[idx+1:idx2]))+'}{d'+peal(convert(ts[idx2:idx3]))+'}'] + ts[idx3:]
             else:
-                idx2 = find_larger_space(ts, idx+1, 1) # idx2が次の(n以上)-space
-                ts = ts[:idx] + [op+'('+peal(convert(ts[idx+1:idx2]))+')'] + ts[idx2:]            
-        elif (op=='\\frac '): # 分数（「ぶんの」）
+                ts = ts[:idx] + [op+'('+peal(convert(ts[idx+1:idx2]))+')'] + ts[idx2:]          
+        elif (op in ['\\frac ', '\\carf ', '_P_', '_C_']): # 前後に1チャンクずつとるタイプ
             idx2 = find_larger_space(ts, idx+1, 1)
             idx3 = find_larger_space(ts, idx-1, -1)
-            ts = ts[:max(0,idx3+1)] + ['\\frac{'+peal(convert(ts[idx+1:idx2]))+'}{'+(peal(convert(ts[idx3+1:idx])))+'}'] + ts[idx2:]
-        elif (op=='\\carf '): # 分数（「わる」）
-            idx2 = find_larger_space(ts, idx+1, 1)
-            idx3 = find_larger_space(ts, idx-1, -1)
-            ts = ts[:max(0,idx3+1)] + ['\\frac{'+peal(convert(ts[idx3+1:idx]))+'}{'+(peal(convert(ts[idx+1:idx2])))+'}'] + ts[idx2:]
-        elif (op in ['^', '^/']): # べき乗、べき乗根
+            if (op=='\\frac '): # 分数（「ぶんの」）
+                ts = ts[:max(0,idx3+1)] + ['\\frac{'+peal(convert(ts[idx+1:idx2]))+'}{'+(peal(convert(ts[idx3+1:idx])))+'}'] + ts[idx2:]
+            elif (op=='\\carf '): # 分数（「わる」）
+                ts = ts[:max(0,idx3+1)] + ['\\frac{'+peal(convert(ts[idx3+1:idx]))+'}{'+(peal(convert(ts[idx+1:idx2])))+'}'] + ts[idx2:]
+            elif (op=='_P_'):
+                ts = ts[:max(0,idx3+1)] + ['{}_{'+peal(convert(ts[idx3+1:idx]))+'}\\textrm{P}_{'+(peal(convert(ts[idx+1:idx2])))+'}'] + ts[idx2:]
+            elif (op=='_C_'):
+                ts = ts[:max(0,idx3+1)] + ['{}_{'+peal(convert(ts[idx3+1:idx]))+'}\\textrm{C}_{'+(peal(convert(ts[idx+1:idx2])))+'}'] + ts[idx2:]
+        elif (op in ['\\overline ']): # 後ろに1チャンクとるタイプ
+            idx2 = find_larger_space(ts, idx-1, -1) + 1
+            ts = ts[:max(0,idx2)] + ['\\overline{'+peal(convert(ts[idx2:idx]))+'}'] + ts[idx+1:]
+        elif (op in ['^', '^/']): # べき乗、べき乗根 （後ろに2チャンクとるタイプ）
             '''
             # 演算子でないものが2個連続で並んでいるところを左に検索。そこで切る。
             idx2 = find_nopnop(ts, idx-1, -1) # (idx2-1, idx2) が該当。見つからなかったらidx2==0
@@ -613,7 +750,7 @@ def convert(tokenized_sentence):
             idx3 = find_larger_space(ts, idx-1, -1)
             ts = ts[:max(0,idx3+1)] + [wrap(peal(convert(ts[idx3+1:idx])),op)+op+wrap(peal(convert(ts[idx+1:idx2])),op)] + ts[idx2:]            
         else:  # 一般的な二項演算子 これ、もうほとんど何もやってない。
-            ts = ts[:max(0,idx-1)] + [(ts[idx-1] if idx>0 else '')+ts[idx]+(ts[idx+1] if idx+1<len(ts) else '')] + ts[idx+2:]
+            ts = ts[:max(0,idx-1)] + [(ts[idx-1] if idx>0 and not isspaces(ts[idx-1]) else '')+ts[idx]+(ts[idx+1] if idx+1<len(ts) and not isspaces(ts[idx+1]) else '')] + ts[idx+2:]
     return ts
 
 def concat_number(tokenized_sentence):
@@ -684,7 +821,7 @@ def hiragana2tex(s):
     s <str> : ひらがな文字列（実は「エー」で 'A'(大文字！) が出せたりとかはあるので、ひらがなだけに限ったわけではない）
     returns <str> : tex 文字列
     '''
-    return convert(remove_emptystr(concat_number(tokenize(s))))
+    return convert(detect_diff(remove_emptystr(concat_number(tokenize(s)))))
 
 
 
@@ -720,4 +857,17 @@ if (__name__=='__main__'):
         print('<<< tex string >>> ', hiragana2tex(s)) # tex 文字列への変換結果
         print()
 
+
+ # TODO: 空白だけのトークンは結合直前に空文字列に置き換える
+ # TODO: 経路探索を真面目にやる　（解釈不能文字数を最小化）
+ # TODO: 三角関数の扱いを「記号」に変えてみる
+ # TODO: じじょう
+ # TODO: しい、ぴい　に対応
+ # TODO: いくつかの定理
+ # TODO: バー
+ # TODO: 微分でぃーでぃーえっくす
+
+# TODO: find_nopnopを適切にして、パラメータ部分に「マイナス記号」だけが乗ったりしないようにする。
+# find_good_chunk(ts,idx,d) が良いか。
+# good chunkとは・・・冒頭がプラスマイナス以外の演算子でない、末尾が演算子でない
 
