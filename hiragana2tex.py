@@ -127,6 +127,7 @@ dictionary_misc = {
         'ふた':'2',
         'さん':'3',
         'よん':'4',
+        'し':'4', # これ大丈夫かな。なお、「しー」「しい」は他とかぶる。
         'ご':'5',
         'ごー':'5', # ごおー (5o) とかがあって「ごお」を加えていない
         'ごお':'5',
@@ -134,6 +135,7 @@ dictionary_misc = {
         'ー': '', # そもそもこれで語尾の伸ばし棒を吸収できるので、他のいくつかのエントリーは消しても大丈夫なはず。ただ、一応残してある。(TODO: このエントリは妥当か？)
         'ろっ':'6',
         'なな':'7',
+        'しち':'7',
         'はち':'8',
         'はっ':'8',
         'きゅう':'9',
@@ -156,6 +158,9 @@ dictionary_misc = {
         'てふ': '\\TeX ',
         'てっく': '\\TeX ',
         'てっくす': '\\TeX ',
+        'らてふ': '\\LaTeX ',
+        'らてっく': '\\LaTeX ',
+        'らてっくす': '\\LaTeX ',        
         'じゃば': '\\textrm{JAVA + YOU, DOWNLOAD TODAY!}', # あなたとJAVA, 今すぐダウンロー　ド
         'てん':'.',
         'じょう':'^',
@@ -183,6 +188,7 @@ dictionary_misc = {
         'いこーる':'=',
         'は':'=',
         'のっといこーる':'\\neq ',
+        'なっといこーる':'\\neq ',
         'だいなりいこーる':'\\geq ',
         'しょうなりいこーる':'\\leq ',
         'だいなり':'>',
@@ -197,8 +203,21 @@ dictionary_misc = {
         '」':')',
         '（':'(',
         '）':')',
+        'かっこ':'(',
+        'かっことじ':')',
+        # 'とじかっこ':')', # かっことじかっこ　が)(ではなく()になってしまう。末尾からtokenizeしてけばいいんだけど。逆の事例も出てくるかも。取り急ぎ、封印。
+        'だいかっこ':'[',
+        'だいかっことじ':']',
+        'ちゅうかっこ':'\\{',
+        'ちゅうかっことじ':'\\}',
+        'しょうかっこ':'(',
+        'しょうかっことじ':')',
+        'ぱーせんと':'\\%',
+        'ぱー':'\\%',
         '、':',',
-        '。':'.',  
+        '，':',',
+        '。':'.',
+        '．':'.',  
         '・':'\\cdot ',
         'すいちょく':'\\perp ',
         'ちょっかく':'\\perp ',
@@ -215,6 +234,8 @@ dictionary_misc = {
         'または': '\\vee ', # \\lor は google chart APIが未対応だった
         'ひれい':'\\propto ',
         'びっくり':'!',
+        '！':'!',
+        '!':'!',
         'かいじょう':'!', # 中高生は ^{\\chi} は使わないだろう。
         'あれふ':'\\aleph ',
         'むげん':'\\infty ',
@@ -302,6 +323,7 @@ dictionary_misc = {
         'ちゅうせんていり': '{AB^2 + AC^2 = 2(AM^2 + BM^2)}',
         'とれみーのていり': '{AB\\cdot CD + BC\\cdot DA = AC\\cdot BD}',
         'いいよこいよ': '{114514}',
+        'いいよ！こいよ': '{114514}',
         'なんでやはんしんかんけいないやろ': '{334}',
         'なんでや！はんしんかんけいないやろ': '{334}', # 末尾の！は階乗になる。
         'じんるいうちゅうすべてのこたえ':'{42}',
@@ -431,6 +453,28 @@ def kana2roman(s):
         ret += (roman[idx] if idx>=0 else c)
     return ret
 
+def replace(lis, dic):
+    '''
+    リストlisの各要素がdicのkeyとして存在すればそのvalueに置換する、ということを全要素に対して行った結果得られるリストを返す
+    元のlisはいじられない
+    '''
+    ret = []
+    for i in lis:
+        try:
+            v = dic[i]
+        except KeyError:
+            v = i
+        ret.append(v)
+    return ret
+
+def escape(lis):
+    '''
+    TeXの特殊文字のエスケープ
+    '''
+    return replace(lis, {'\\':'\\textbackslash','{':'\\{','}':'\\}','#':'\\#','$':'\\$','&':'\\&','%':'\\%',
+        '~':'\\textasciitilde','_':'\\_','^':'\\textasciicircum'}) 
+
+
 def tokenize(sentence):
     '''
     トークンに切り出す
@@ -459,7 +503,8 @@ def tokenize(sentence):
         try:
             item = dictionary[sentence[offs-memo[offs]:offs]]
         except KeyError:
-            item = '\\text{'+''.join([c if c!='\\' else '\\backslash' for c in kana2roman(sentence[offs-1])])+'}'
+            # item = '\\text{'+''.join([c if c!='\\' else '\\backslash' for c in kana2roman(sentence[offs-1])])+'}'
+            item = '\\text{'+''.join(escape(kana2roman(sentence[offs-1])))+'}'
         if isinstance(item, str):
             tokenized_sentence.append(item)
         elif isinstance(item, list):
@@ -638,13 +683,14 @@ def detect_diff(ts):
             if (i+1<len(ts) and ts[i+1]=='d'):
                 ret.append(dictionary['びぶんでぃー1'])
                 i += 2
+                continue
             elif (i+2<len(ts) and ts[i+2]=='d' and len(ts[i+1])==1 and ('A'<=ts[i+1][0]<='Z' or 'a'<=ts[i+1][0]<='z')):
                 ret.append(dictionary['びぶんでぃー2'])
                 ret.append(ts[i+1])
                 i += 3
-        else:
-            ret.append(ts[i])
-            i += 1
+                continue
+        ret.append(ts[i])
+        i += 1
     return ret
 
 def convert(tokenized_sentence):
@@ -840,6 +886,7 @@ if (__name__=='__main__'):
     'えっくすにじょうひくわいにじょうは「えっくすたすわい」「えっくすひくわい」',
     'りむ　えっくすがむげん　えふ「えっくす」はぜろ',
     'しぐま　あいいこーるいち　えぬ　けーにじょういこーるろくぶんの　けー「けーたすいち」「にけーたすいち」',
+    'でぃーえふでぃーえっくすいこーるでぃーでぃーえっくす「えっくすさんじょうたすろぐえっくす」',
     'にえー ぶんの  まいなすびーぷらすまいなするーと びーにじょうひくよんえーしー',
     'えーの　ぴーひくいち　じょうごうどういちもどぴー',
     'じーしーでぃー　じゅうに、じゅうはち　はろく'
