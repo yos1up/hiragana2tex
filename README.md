@@ -35,8 +35,8 @@ convert hiragana string to tex string. (ひらがなだけでtex打ち)
 <<< original >>>    りむ　えっくすがむげん　えふ「えっくす」はぜろ
 <<< tex string >>>  \lim _{x\rightarrow \infty }f(x)=0
 
-<<< original >>>    しぐま　あいいこーるいち　えぬ　けーにじょういこーるろくぶんの　けー「けーたすいち」「にけーたすいち」
-<<< tex string >>>  \sum _{i=1}^{n}k^{2}=\frac{k(k+1)(2k+1)}{6}
+<<< original >>>    しぐま　あいいこーるいち　えぬ　けーにじょういこーるろくぶんの　えぬ「えぬたすいち」「にえぬたすいち」
+<<< tex string >>>  \sum _{i=1}^{n}k^{2}=\frac{n(n+1)(2n+1)}{6}
 
 <<< original >>>    にえー ぶんの  まいなすびーぷらすまいなするーと びーにじょうひくよんえーしー
 <<< tex string >>>  \frac{-b\pm \sqrt{b^{2}-4ac}}{2a}
