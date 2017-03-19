@@ -8,10 +8,12 @@ dictionary_misc = {
         'びー':'b',
         'しー':'c',
         'でぃー':'d',
+        'でー':'d',
         'いー':'e',
         'えふ':'f',
         'じー':'g',
         'えいち':'h',
+        'えっち':'h',
         'あい':'i',
         'じぇー':'j',
         'けー':'k',
@@ -24,8 +26,10 @@ dictionary_misc = {
         'あーる':'r',
         'えす':'s',
         'てぃー':'t',
+        'てー':'t',
         'ゆー':'u',
         'ぶい':'v',
+        'ゔぃー':'v',
         'だぶりゅー':'w',
         'だぶる':'w',
         'えっくす':'x',
@@ -33,14 +37,17 @@ dictionary_misc = {
         'えくす': 'x',
         'わい':'y',
         'ぜっと':'z',
+        'ずぃー':'z',
         'エー':'A',
         'ビー':'B',
         'シー':'C',
         'ディー':'D',
+        'デー':'D',
         'イー':'E',
         'エフ':'F',
         'ジー':'G',
         'エイチ':'H',
+        'エッチ':'H',
         'アイ':'I',
         'ジェー':'J',
         'ケー':'K',
@@ -53,8 +60,10 @@ dictionary_misc = {
         'アール':'R',
         'エス':'S',
         'ティー':'T',
+        'テー':'T',
         'ユー':'U',
         'ブイ':'V',
+        'ヴィー':'V',
         'ダブリュー':'W',
         'ダブル':'W',
         'エックス':'X',
@@ -62,6 +71,7 @@ dictionary_misc = {
         'エクス': 'X',
         'ワイ':'Y',
         'ゼット':'Z',
+        'ズィー':'Z',
         'あるふぁ': '\\alpha ',
         'べーた': '\\beta ',
         'がんま': '\\gamma ',
@@ -114,7 +124,7 @@ dictionary_misc = {
         'イオタ': '\\Iota ',
         'カッパ': '\\Kappa ',
         'ラムダ': '\\Lambda ',
-        'シグマ': '\\Sigma ', # これどうにかすべきだよなあ。\\sumと被ってる。
+        'シグマ': '\\Sigma ',
         'ウプシロン': '\\Upsilon ',
         'カイ': '\\Chi ',        
         'ぜろ':'0',
@@ -162,17 +172,17 @@ dictionary_misc = {
         'らてっく': '\\LaTeX ',
         'らてっくす': '\\LaTeX ',        
         'じゃば': '\\textrm{JAVA + YOU, DOWNLOAD TODAY!}', # あなたとJAVA, 今すぐダウンロー　ド
-        'てん':'.',
-        'じょう':'^',
+        'てん':'.', # どっと　は \\cdot
+        'じょう':'^*',
         'じょうこん':'^/',
-        'じじょう':['2','^'],
+        'じじょう':['2','^*'],
         'ぴい':'_P_', # 順列
         'しい':'_C_', # 組み合わせ
         'ばー':'\\overline ',
         'の':'', # さんのよんじょう（いずれは、^のヒントに使うようにするかも。）
         'と':'', # きゅうとよんぶんのさん
         'か':'', # きゅうかよんぶんのさん（昔の呼び方）
-        'ことの':'',
+        'ことの':'', # たすことの、ひくことの、かけることの、わることの
         'たす':'+',
         'ぷらす':'+',
         'ぷらまい':'\\pm ',
@@ -313,15 +323,24 @@ dictionary_misc = {
         'せかんと': '\\sec ',
         'こせかんと': '\\csc ',
         'こたんじぇんと': '\\cot ',
+        # 定理辞書
         'よげんていり': '{AC^2 = AB^2 + BC^2 - 2AB\\cdot BC\\cos B}',
         'せいげんていり': '{\\frac{AB}{\\sin C} = \\frac{BC}{\\sin A} = \\frac{CA}{\\sin B}}',
         'おいらーのこうしき': '{e^{i\\pi} = -1}',
         'どもあぶるのていり': '{e^{i\\theta} = \\cos\\theta + i\\sin\\theta}',
+        'どもるがんのほうそく': '{\\bar{A\\cap B} = \\bar{A}\\cup\\bar{B}, \\bar{A\\cup B} = \\bar{A}\\cap\\bar{B}}',
         'かほうていり': '{\\sin(x+y) = \\sin x \\cos y + \\cos x \\sin y, \\cos(x+y) = \\cos x \\cos y - \\sin x \\sin y}',
         'ぴたごらすのていり': '{AB^2 + BC^2 = AC^2}',
         'さんへいほうのていり': '{AB^2 + BC^2 = AC^2}',
         'ちゅうせんていり': '{AB^2 + AC^2 = 2(AM^2 + BM^2)}',
         'とれみーのていり': '{AB\\cdot CD + BC\\cdot DA = AC\\cdot BD}',
+        'ふぇるまーのしょうていり': '{\\textrm{gcd}(p,a)=1 \\Rightarrow a^{p-1}\\equiv 1 (\\bmod p)}',
+        'おいらーのていり': '{\\textrm{gcd}(m,a)=1 \\Rightarrow a^{\\varphi(m)}\\equiv 1 (\\bmod m)}',
+        'うぃるそんのていり':'{(p-1)! \\equiv -1 (\\bmod p)}',
+        'そうかそうじょう':'{x_i \\geq 0 \\Rightarrow \\frac{1}{n}\\sum_{i=1}^n x_i \\geq \\sqrt[n]{\\prod_{i=1}^n x_i}}',
+        'こーしーしゅわるつ':'{x_i, y_i \\geq 0 \\Rightarrow (\\sum_{i=1}^n x_i^2)(\\sum_{i=1}^n y_i^2) \\geq (\\sum_{i=1}^n x_iy_i)^2}',
+        'しぜんたいすうのてい': '{2.71828 18284 59045 23536 02874 71352 66249 77572 47093 69995 95749 66967 62772 40766 30353 54759 45713 82178 52516 64274 \\ldots}',
+        'えんしゅうりつ': '{3.14159 26535 89793 23846 26433 83279 50288 41971 69399 37510 58209 74944 59230 78164 06286 20899 86280 34825 34211 70679 \\ldots}',
         'いいよこいよ': '{114514}',
         'いいよ！こいよ': '{114514}',
         'なんでやはんしんかんけいないやろ': '{334}',
@@ -333,6 +352,9 @@ dictionary_func = { # 関数　自動で括弧がついたり特殊処理が行�
         # TODO: 三角関数はここに加えず単に記号とした方が良い？
         # TODO: 「るーと」はここよりも「じょう」「じょうこん」「ぶんの」あたりと同じ括りの方が良いかも？
         # むしろそいつらをここに持ってきた方が良いかも
+        'うえつき':'^',
+        'したつき':'_',
+        'そえじ':'_', # 一応出せる        
         'るーと':'\\sqrt ',
         'びぶんでぃー1':'\\diffd1 ', # これらはdetect_diffによって発生します
         'びぶんでぃー2':'\\diffd2 ',         
@@ -387,7 +409,9 @@ dictionary_func = { # 関数　自動で括弧がついたり特殊処理が行�
         'えるふ': '\\textrm{erf} ', # 言わないか。
         'あいあいでぃー': '\\textrm{i.i.d.} ',
         'じーしーでぃー': '\\textrm{gcd} ', # この辺は誤爆する人いないかな・・・？
-        'えるしーえむ': '\\textrm{LCM} '
+        'えるしーえむ': '\\textrm{LCM} ',
+        # 'ぎょうれつ':'\\matrix2x2 ' # 未実装
+        # 'べくとる': \\vector ' # 未実装
 }
 dictionary_sym_sub = { # _ で真下に式が書かれる記号たち（関数としては処理しない）
         'まっくす':'\\max ',
@@ -471,8 +495,8 @@ def escape(lis):
     '''
     TeXの特殊文字のエスケープ
     '''
-    return replace(lis, {'\\':'\\textbackslash','{':'\\{','}':'\\}','#':'\\#','$':'\\$','&':'\\&','%':'\\%',
-        '~':'\\textasciitilde','_':'\\_','^':'\\textasciicircum'}) 
+    return replace(lis, {'\\':'\\backslash','{':'\\{','}':'\\}','#':'\\#','$':'\\$','&':'\\&','%':'\\%',
+        '~':'\\~','_':'\\_','^':'\\^{}'}) 
 
 
 def tokenize(sentence):
@@ -546,7 +570,7 @@ def wrap(s, op):
 
     TODO: もう少し真面目に、括弧で包み込むべき条件を考えた方が良い？
     '''
-    if (op=='^'): # べきの基数をかっこで包み込むべきかを返す
+    if (op=='^*'): # 「じょう」の基数をかっこで包み込むべきかを返す
         # 空白以外の文字が1文字以下、または、単一のトークンである、でなければ()で囲う
         return s if sum([c!=' ' for c in s])<=1 or s in tokens else ('(' + s + ')')
     else: # かけざんの両項を括弧で包み込むべきかを返す
@@ -577,7 +601,9 @@ def strength(op):
         return 6
     if (op in list(tokens_sym_sub_sup)+list(tokens_sym_sub)):
         return 5
-    if (op in ['^', '^/'] + list(tokens_func)):
+    if (op in ['\\matrix2x2 ']):
+        return 4.5
+    if (op in ['^*', '^/'] + list(tokens_func)):
         return 4
     if (op in ['\\times ', '\\cdot ', '\\frac ', '\\carf ']):
         return 3
@@ -719,7 +745,6 @@ def convert(tokenized_sentence):
         ts = ts[:idx] + ['('+convert(ts[idx+1:idx2])+')'] + ts[idx2+1:] # 括弧の中身を再帰的にconvertする。
     # この時点で、かっこは全て解決済み
 
-
     # TODO: find_nopnopを色々なところに入れていく（より空気を読むようになる。）
     while 1: # 強い演算子の周囲から順に、トークンを結合していく。
         if (len(ts)>=100000):
@@ -743,8 +768,8 @@ def convert(tokenized_sentence):
         elif (op in tokens_func): # 関数　自動で括弧がついたり特殊処理が行われたり
             # ts[idx+1]がn-spaceの時、その次の(n以上)-spaceを見つけて、そのインデックスを返す。n-spaceでない場合は、idx+2を返す。
             idx2 = find_larger_space(ts, idx+1, 1) # idx2が次の(n以上)-space
-            if (op=='\\sqrt '):
-                ts = ts[:idx] + ['\\sqrt{'+peal(convert(ts[idx+1:idx2]))+'}'] + ts[idx2:]
+            if (op in ['\\sqrt ', '^', '_']):
+                ts = ts[:idx] + [op+'{'+peal(convert(ts[idx+1:idx2]))+'}'] + ts[idx2:]
             elif (op == '\\abs '):
                 ts = ts[:idx] + ['| '+peal(convert(ts[idx+1:idx2]))+'| '] + ts[idx2:]            
             elif (op == '\\norm '):
@@ -760,6 +785,11 @@ def convert(tokenized_sentence):
             elif (op == '\\diffd2 '): # dぴよ/dほげ
                 idx3 = find_larger_space(ts, idx2, 1)
                 ts = ts[:idx] + ['\\frac{d'+peal(convert(ts[idx+1:idx2]))+'}{d'+peal(convert(ts[idx2:idx3]))+'}'] + ts[idx3:]
+            elif (op == '\\matrix2x2 '):
+                idx3 = find_larger_space(ts, idx2, 1)
+                idx4 = find_larger_space(ts, idx3, 1)
+                idx5 = find_larger_space(ts, idx4, 1) # そろそろ一般化したい
+                # 実装中
             else:
                 ts = ts[:idx] + [op+'('+peal(convert(ts[idx+1:idx2]))+')'] + ts[idx2:]          
         elif (op in ['\\frac ', '\\carf ', '_P_', '_C_']): # 前後に1チャンクずつとるタイプ
@@ -776,7 +806,7 @@ def convert(tokenized_sentence):
         elif (op in ['\\overline ']): # 後ろに1チャンクとるタイプ
             idx2 = find_larger_space(ts, idx-1, -1) + 1
             ts = ts[:max(0,idx2)] + ['\\overline{'+peal(convert(ts[idx2:idx]))+'}'] + ts[idx+1:]
-        elif (op in ['^', '^/']): # べき乗、べき乗根 （後ろに2チャンクとるタイプ）
+        elif (op in ['^*', '^/']): # べき乗、べき乗根 （後ろに2チャンクとるタイプ）
             '''
             # 演算子でないものが2個連続で並んでいるところを左に検索。そこで切る。
             idx2 = find_nopnop(ts, idx-1, -1) # (idx2-1, idx2) が該当。見つからなかったらidx2==0
@@ -785,8 +815,8 @@ def convert(tokenized_sentence):
             idx2 = find_larger_space(ts, idx-1, -1) + 1            
             idx2 = find_nopnop(ts, idx2, -1)
             idx3 = find_larger_space(ts, idx2-1, -1) #TODO：リファクタリング。idx2, idx3がチャンクの先頭になるように書き換えたい        
-            if (op=='^'):
-                ts = ts[:max(0,idx3+1)] + [wrap(peal(convert(ts[idx3+1:idx2])),'^')+'^{'+peal(convert(ts[idx2:idx]))+'}'] + ts[idx+1:]
+            if (op=='^*'):
+                ts = ts[:max(0,idx3+1)] + [wrap(peal(convert(ts[idx3+1:idx2])),'^*')+'^{'+peal(convert(ts[idx2:idx]))+'}'] + ts[idx+1:]
             else:
                 ts = ts[:max(0,idx3+1)] + ['\\sqrt['+convert(ts[idx2:idx])+']{'+peal(convert(ts[idx3+1:idx2]))+'}'] + ts[idx+1:]                
             # ts = ts[:max(0,idx2-1)] + [(ts[idx2-1] if idx2>0 else '')+'^{'+peal(convert(ts[idx2:idx]))+'}'] + ts[idx+1:]
@@ -913,6 +943,11 @@ if (__name__=='__main__'):
  # TODO: いくつかの定理
  # TODO: バー
  # TODO: 微分でぃーでぃーえっくす
+ # TODO: うえつき、したつき（そえじ）
+ # 以上は対応済み
+
+# 行列、ベクトル
+# まいなすとひくを区別して精度を高める？
 
 # TODO: find_nopnopを適切にして、パラメータ部分に「マイナス記号」だけが乗ったりしないようにする。
 # find_good_chunk(ts,idx,d) が良いか。
