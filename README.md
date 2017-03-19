@@ -3,6 +3,8 @@ convert hiragana string to tex string. (ひらがなだけでtex打ち)
 
 ひらがなだけでtexを打てるようにするために作成したプログラムです。 python3 で動作します。パッケージは不要です。
 
+* web上で試せるデモを用意しました： http://yos.gozaru.jp/hiragana2tex/
+
 # できること
 日本語（主にひらがな）で入力された文字列を、tex文字列に変換できます。例えば、以下のような文字列変換ができます。
 ```
